@@ -1,10 +1,10 @@
 /**
  * Created by gr1 on 03/03/2015.
  */
-var http = require('http'), // Built-in http module provides HTTP server and client functionality
-    fs = require('fs'),
-    path = require('path'), // Built-in path module provides filesystem path–related functionality
-    mime = require('mime'), // Add-on mime module provides ability to derive a MIME type based on a filename extension
+var http =  require('http'), // Built-in http module provides HTTP server and client functionality
+    fs   =  require('fs'),
+    path =  require('path'), // Built-in path module provides filesystem path–related functionality
+    mime =  require('mime'), // Add-on mime module provides ability to derive a MIME type based on a filename extension
 
     cache = {}; // cache object is where the contents or cached files are stored
 
@@ -19,7 +19,7 @@ function send404(response){
 
 // Serving file data
 function sendFile(response, filePath, fileContents){
-    response.writeHead(200, {"ontent-type": mime.lookup(path.basename(filePath))});
+    response.writeHead(200, {'content-type': mime.lookup(path.basename(filePath))});
     response.end(fileContents);
 }
 
@@ -45,10 +45,6 @@ function serveStatic(response, cache, absPath){
     }
 }
 
-// Provide an already defined HTTP server so it can share the same TCP/IP port
-var chatServer = require('./lib/chat_server');
-chatServer.listen(server);
-
 /* CREATING HTTP SERVER */
 // Create HTTP server, using anonymous function to define per-request behavior
 var server = http.createServer(function(request, response){
@@ -62,6 +58,12 @@ var server = http.createServer(function(request, response){
     var absPath = './' + filePath;
     serveStatic(response, cache, absPath); // Serve static file
 });
+
+// Provide an already defined HTTP server so it can share the same TCP/IP port
+var chatServer = require('./lib/chat_server');
+chatServer.listen(server);
+
+
 
 server.listen(3000, function(){
     console.log("Server listening on port 3000");
